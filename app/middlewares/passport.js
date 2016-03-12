@@ -23,6 +23,7 @@ passport.use(
       .then((account) => {
         account.checkPassword(password, (err, result) => {
           if (err || !result) return done(null, false, { message: 'Incorrect password.' })
+          delete account.password
           return done(null, account)
         })
       })

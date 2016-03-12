@@ -17,6 +17,10 @@ router
   .delete('/api/v1/accounts/:id', controllers.api.v1.accounts.delete)
 
 router
-  .post('/api/v1/auth/local', passport.authenticate('local'))
+  .post('/api/v1/auth/local',
+    passport.authenticate('local'),
+    function (req, res) {
+      res.json(req.user)
+    })
 
 module.exports = router
