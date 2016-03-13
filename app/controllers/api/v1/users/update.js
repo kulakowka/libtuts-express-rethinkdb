@@ -1,14 +1,15 @@
 'use strict'
 
-const Account = require('models/account')
+const User = require('models/user')
 
 module.exports = {
 
   // Validattion middleware
   validations: function * (req, res, next) {
-    req.checkBody('email', 'Invalid postparam').notEmpty().isEmail()
-    req.checkBody('password', 'Invalid postparam').notEmpty()
-
+    req.checkBody('email', 'Email is invalid').notEmpty().isEmail()
+    req.checkBody('password', 'Password is invalid').notEmpty()
+    // if is owner
+    req.checkParams('id', 'Id is invalid').equals(req.user.id)
     next()
   },
 
@@ -23,9 +24,9 @@ module.exports = {
   action: function * (req, res, next) {
     const id = req.params.id
     const { email, password } = req.body
-    const account = yield Account.get(id)
-
-    const data = yield account.merge({email, password}).save()
+    const user = yield User.getBy({id})
+    if (!user) return res.status(404).json({message: 'User not found'})
+    const data = yield user.merge({email, password}).save()
 
     res.json(data)
   }

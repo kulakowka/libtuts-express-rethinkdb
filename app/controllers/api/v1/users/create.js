@@ -1,6 +1,6 @@
 'use strict'
 
-const Account = require('models/account')
+const User = require('models/user')
 
 module.exports = {
 
@@ -23,8 +23,8 @@ module.exports = {
   action: function * (req, res, next) {
     const { email, password } = req.body
 
-    const account = new Account({email, password})
-    const data = yield account.save()
+    const user = new User({email, password})
+    const data = yield user.save()
 
     delete data.password
 

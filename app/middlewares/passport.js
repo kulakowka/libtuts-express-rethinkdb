@@ -2,11 +2,10 @@
 
 var passport = require('passport')
 var JwtBearerStrategy = require('passport-http-jwt-bearer').Strategy
-var BearerStrategy = require('passport-http-bearer').Strategy
 var LocalStrategy = require('passport-local').Strategy
-var Account = require('models/account')
-
-var jwt = require('jsonwebtoken')
+var GitHubStrategy = require('passport-github').Strategy
+var User = require('models/user')
+var _ = require('lodash')
 
 const TOKEN_SECRET = 'token secret string'
 
@@ -19,15 +18,15 @@ passport.use(
       passwordField: 'password'
     },
     function (email, password, done) {
-      Account.getBy({
+      User.getBy({
         email: email.trim().toLowerCase()
       })
-      .then((account) => {
-        if (!account) return done(null, false, { message: 'Incorrect email.' })
-        account.checkPassword(password, (err, result) => {
+      .then((user) => {
+        if (!user) return done(null, false, { message: 'Incorrect email.' })
+        user.checkPassword(password, (err, result) => {
           if (err || !result) return done(null, false, { message: 'Incorrect password.' })
-          delete account.password
-          return done(null, account)
+          delete user.password
+          return done(null, user)
         })
       })
       .catch(done)
@@ -38,9 +37,10 @@ passport.use(
 passport.use(new JwtBearerStrategy(
   TOKEN_SECRET,
   function (token, done) {
-    Account.get(token.id).run().then((account) => {
-      if (!account) return done(null, false)
-      return done(null, account, token)
+    User.getBy({id: token.id}).then((user) => {
+      // console.log('token', token, user)
+      if (!user) return done(null, false)
+      return done(null, user, token)
     }).catch(done)
   }
 ))
