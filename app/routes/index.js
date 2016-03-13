@@ -9,18 +9,34 @@ var passport = require('passport')
 
 router.use(expressValidator())
 
-router
-  .get('/api/v1/accounts', controllers.api.v1.accounts.index)
-  .post('/api/v1/accounts', controllers.api.v1.accounts.create)
-  .get('/api/v1/accounts/:id', controllers.api.v1.accounts.show)
-  .put('/api/v1/accounts/:id', controllers.api.v1.accounts.update)
-  .delete('/api/v1/accounts/:id', controllers.api.v1.accounts.delete)
+var isUser = passport.authenticate('bearer', { session: false })
 
-router
-  .post('/api/v1/auth/local',
-    passport.authenticate('local'),
-    function (req, res) {
-      res.json(req.user)
+// Settings
+router.route('/api/v1/settings')
+  .get(isUser, controllers.api.v1.settings.index)
+
+// Accounts
+router.route('/api/v1/accounts')
+  .get(controllers.api.v1.accounts.index)
+  .post(controllers.api.v1.accounts.create)
+
+router.route('/api/v1/accounts/:id')
+  .get(controllers.api.v1.accounts.show)
+  .put(controllers.api.v1.accounts.update)
+  .delete(controllers.api.v1.accounts.delete)
+
+// отправляем сюда мыло и пароль - получаем временный токен
+router.route('/api/v1/auth/local')
+  .post(controllers.api.v1.auth.local)
+
+// с этим токеном заходим сюда, если токена нет или он неверный - bad request
+router.route('/api/v1/test/protected')
+  .get(passport.authenticate('jwt-bearer', { session: false }), function (req, res) {
+    res.json({
+      protected: true,
+      authInfo: req.authInfo,
+      account: req.user
     })
+  })
 
 module.exports = router

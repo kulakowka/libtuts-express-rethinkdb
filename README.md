@@ -1,3 +1,6 @@
+## Процесс авторизации
+https://github.com/scottksmith95/beerlocker/blob/master/beerlocker-6.2/server.js
+
 1. Для всяческих валидаций можно использовать вот это:
 https://github.com/ctavan/express-validator
 https://github.com/chriso/validator.js

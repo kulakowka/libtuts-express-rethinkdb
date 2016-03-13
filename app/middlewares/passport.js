@@ -1,6 +1,14 @@
+'use strict'
+
 var passport = require('passport')
+var JwtBearerStrategy = require('passport-http-jwt-bearer').Strategy
+var BearerStrategy = require('passport-http-bearer').Strategy
 var LocalStrategy = require('passport-local').Strategy
 var Account = require('models/account')
+
+var jwt = require('jsonwebtoken')
+
+const TOKEN_SECRET = 'token secret string'
 
 // Configure authentication strategies
 
@@ -11,16 +19,11 @@ passport.use(
       passwordField: 'password'
     },
     function (email, password, done) {
-      Account
-      .filter({
+      Account.getBy({
         email: email.trim().toLowerCase()
       })
-      .run()
-      .then((accounts) => {
-        if (!accounts.length) return done(null, false, { message: 'Incorrect email.' })
-        return accounts.pop()
-      })
       .then((account) => {
+        if (!account) return done(null, false, { message: 'Incorrect email.' })
         account.checkPassword(password, (err, result) => {
           if (err || !result) return done(null, false, { message: 'Incorrect password.' })
           delete account.password
@@ -32,20 +35,14 @@ passport.use(
   )
 )
 
-// Configure persistent sessions
-
-passport.serializeUser(function (account, done) {
-  done(null, account.id)
-})
-
-passport.deserializeUser(function (id, done) {
-  Account.get(id).run()
-  .then(function (account) {
-    done(null, account)
-  })
-  .catch(function (err) {
-    done(err)
-  })
-})
+passport.use(new JwtBearerStrategy(
+  TOKEN_SECRET,
+  function (token, done) {
+    Account.get(token.id).run().then((account) => {
+      if (!account) return done(null, false)
+      return done(null, account, token)
+    }).catch(done)
+  }
+))
 
 module.exports = passport

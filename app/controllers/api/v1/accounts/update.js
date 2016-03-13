@@ -23,7 +23,9 @@ module.exports = {
   action: function * (req, res, next) {
     const id = req.params.id
     const { email, password } = req.body
-    const data = yield Account.get(id).update({email, password}).run()
+    const account = yield Account.get(id)
+
+    const data = yield account.merge({email, password}).save()
 
     res.json(data)
   }
