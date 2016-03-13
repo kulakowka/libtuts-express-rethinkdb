@@ -28,7 +28,7 @@ module.exports = {
   action: function * (req, res, next) {
     passport.authenticate('local', function (err, user, info) {
       if (err) return next(err)
-      if (!user) return res.status(401).json({ error: 'User not found' })
+      if (!user) return res.status(400).json({ message: 'Incorrect username or password' })
 
       var token = jwt.sign({
         id: user.id,

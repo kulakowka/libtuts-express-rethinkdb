@@ -24,11 +24,15 @@ module.exports = {
     const { email, password } = req.body
 
     const user = new User({email, password})
-    const data = yield user.save()
+    const data = yield user.save().catch((err) => {
+      res.status(400).json({message: err.message})
+    })
 
-    delete data.password
+    if (data) {
+      delete data.password
 
-    res.json(data)
+      res.json(data)
+    }
   }
 
 }
