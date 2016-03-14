@@ -8,6 +8,8 @@ var bcrypt = require('bcrypt')
 
 var User = thinky.createModel('User', {
   id: type.string(),
+  username: type.string(),
+  fullName: type.string(),
   email: type.string(),
   password: type.string(),
   createdAt: type.date().default(r.now()),
@@ -70,6 +72,17 @@ User.pre('save', function (next) {
       next()
     })
   })
+})
+
+User.post('save', function (next) {
+  const old = this.getOldValue()
+  const fullNameChanged = this.fullName !== old.fullName
+  const usernameChanged = this.username !== old.username
+  if (fullNameChanged || usernameChanged) {
+    console.log('create queue for "user update info" event')
+    // Поставим задание в очередь - обновить все записи в котрых вставлен автор в виде документа а не только айдишник.
+  }
+  next()
 })
 
 module.exports = User
