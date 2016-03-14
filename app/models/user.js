@@ -23,18 +23,18 @@ var User = thinky.createModel('User', {
 User.ensureIndex('updatedAt')
 User.ensureIndex('email')
 
-User.pre('save', function (next) {
-  User.filter({
-    email: this.email
-  })
-  .count()
-  .execute()
-  .then((count) => {
-    if (count) return next(new ValidationError('Email is invalid or already taken.'))
-    next()
-  })
-  .catch(next)
-})
+// User.pre('save', function (next) {
+//   User.filter({
+//     email: this.email
+//   })
+//   .count()
+//   .execute()
+//   .then((count) => {
+//     if (count) return next(new ValidationError('Email is invalid or already taken.'))
+//     next()
+//   })
+//   .catch(next)
+// })
 
 /**
  * Методы экземпляра модеи

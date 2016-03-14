@@ -3,9 +3,7 @@
 var passport = require('passport')
 var JwtBearerStrategy = require('passport-http-jwt-bearer').Strategy
 var LocalStrategy = require('passport-local').Strategy
-var GitHubStrategy = require('passport-github').Strategy
 var User = require('models/user')
-var _ = require('lodash')
 
 const TOKEN_SECRET = 'token secret string'
 
