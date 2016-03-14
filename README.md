@@ -1,5 +1,7 @@
 https://github.com/rethinkdb/rethinkdb-example-nodejs-chat/blob/master/app.js
 
+https://www.rethinkdb.com/docs/cookbook/javascript/
+
 а еще можно так сделать:
 чуваку отправляем письмо - он там нажимает и авторизуется.
 пасвордлесс типа.

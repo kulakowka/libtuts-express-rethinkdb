@@ -15,6 +15,7 @@ var Tutorial = thinky.createModel('Tutorial', {
   title: type.string(),
   content: type.string(),
   contentHtml: type.string(),
+  commentsCount: type.number().default(0),
   createdAt: type.date().default(r.now()),
   updatedAt: type.date().default(r.now())
 })

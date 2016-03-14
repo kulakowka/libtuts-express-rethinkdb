@@ -1,5 +1,6 @@
 'use strict'
 
+var co = require('co')
 var marked = require('marked')
 var thinky = require('utils/thinky')
 var type = thinky.type
@@ -22,6 +23,30 @@ Comment.belongsTo(Tutorial, 'tutorial', 'tutorialId', 'id')
 Comment.pre('save', function (next) {
   this.contentHtml = marked(this.content)
   next()
+})
+
+Comment.post('save', function (next) {
+  const tutorialId = this.tutorialId
+  const authorId = this.authorId
+  co(function* () {
+    // increment comments count
+    yield Tutorial.get(tutorialId).update({commentsCount: r.row('commentsCount').add(1)}).run()
+    yield User.get(authorId).update({commentsCount: r.row('commentsCount').add(1)}).run()
+  })
+  .then((value) => next())
+  .catch(next)
+})
+
+Comment.post('delete', function (next) {
+  const tutorialId = this.tutorialId
+  const authorId = this.authorId
+  co(function* () {
+    // decrement comments count
+    yield Tutorial.get(tutorialId).update({commentsCount: r.row('commentsCount').add(-1)}).run()
+    yield User.get(authorId).update({commentsCount: r.row('commentsCount').add(-1)}).run()
+  })
+  .then((value) => next())
+  .catch(next)
 })
 
 module.exports = Comment
