@@ -1,5 +1,6 @@
 'use strict'
 
+const Language = require('models/language')
 const Tutorial = require('models/tutorial')
 
 module.exports = {
@@ -20,10 +21,12 @@ module.exports = {
 
   // Action logic middleware
   action: function * (req, res, next) {
-    const { title, content } = req.body
+    let { title, content, languages } = req.body
     const author = req.user
-    const tutorial = new Tutorial({ title, content, author })
-    const data = yield tutorial.saveAll({author: true}).catch((err) => {
+    languages = typeof languages === 'string' ? [languages] : languages
+    languages = yield Language.getAll(...languages).run()
+    const tutorial = new Tutorial({ title, content, author, languages })
+    const data = yield tutorial.saveAll({author: true, languages: true}).catch((err) => {
       res.status(400).json({message: err.message})
     })
 

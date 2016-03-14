@@ -7,6 +7,7 @@ module.exports = {
   // Validattion middleware
   validations: function * (req, res, next) {
     req.checkBody('email', 'Invalid postparam').notEmpty().isEmail()
+    req.checkBody('username', 'Invalid postparam').notEmpty()
     req.checkBody('password', 'Invalid postparam').notEmpty()
 
     next()
@@ -21,9 +22,9 @@ module.exports = {
 
   // Action logic middleware
   action: function * (req, res, next) {
-    const { email, password } = req.body
+    const { email, password, username, fullName } = req.body
 
-    const user = new User({email, password})
+    const user = new User({email, password, username, fullName})
     const data = yield user.save().catch((err) => {
       res.status(400).json({message: err.message})
     })

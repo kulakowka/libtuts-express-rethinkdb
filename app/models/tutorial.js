@@ -1,6 +1,7 @@
 
 'use strict'
 
+var co = require('co')
 var marked = require('marked')
 var thinky = require('utils/thinky')
 var type = thinky.type
@@ -22,13 +23,34 @@ var Tutorial = thinky.createModel('Tutorial', {
 
 // Tutorial.hasAndBelongsToMany(Project, 'projects', 'id', 'id')
 // Tutorial.hasAndBelongsToMany(Language, 'languages', 'id', 'id')
-// Tutorial.hasMany(Comment, 'comments', 'id', 'tutorialId')
+Tutorial.hasAndBelongsToMany(Language, 'languages', 'id', 'id')
 Tutorial.belongsTo(User, 'author', 'authorId', 'id')
 
 // marked content
 Tutorial.pre('save', function (next) {
   if (this.content) this.contentHtml = marked(this.content)
   next()
+})
+
+Tutorial.post('save', function (next) {
+  const authorId = this.authorId
+  co(function* () {
+    // increment comments count
+    yield User.get(authorId).update({tutorialsCount: r.row('tutorialsCount').add(1)}).run()
+  })
+  .then((value) => next())
+  .catch(next)
+})
+
+Tutorial.post('delete', function (next) {
+  const tutorialId = this.tutorialId
+  const authorId = this.authorId
+  co(function* () {
+    // decrement comments count
+    yield User.get(authorId).update({tutorialsCount: r.row('tutorialsCount').add(-1)}).run()
+  })
+  .then((value) => next())
+  .catch(next)
 })
 
 module.exports = Tutorial

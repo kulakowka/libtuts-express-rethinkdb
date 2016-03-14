@@ -17,7 +17,7 @@ module.exports = {
   // Action logic middleware
   action: function * (req, res, next) {
     const limit = req.query.limit && req.query.limit < ITEMS_PER_PAGE ? req.query.limit : ITEMS_PER_PAGE
-    const data = yield Tutorial.getJoin({ author: true }).orderBy(r.desc('createdAt')).limit(limit).run()
+    const data = yield Tutorial.getJoin({ author: true, languages: true }).orderBy(r.desc('createdAt')).limit(limit).run()
     res.json(data)
   }
 

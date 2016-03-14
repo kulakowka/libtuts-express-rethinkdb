@@ -18,8 +18,8 @@ var Language = thinky.createModel('Language', {
 })
 
 Language.ensureIndex('slug')
-
 // Language.hasAndBelongsToMany(Tutorial, 'tutorials', 'id', 'id')
+// Tutorial.hasAndBelongsToMany(Language, 'languages', 'id', 'id')
 // Language.hasAndBelongsToMany(Project, 'projects', 'id', 'id')
 Language.belongsTo(User, 'author', 'authorId', 'id')
 

@@ -29,8 +29,8 @@ router.route('/api/v1/languages/:slug')
   .put(isUser, controllers.api.v1.languages.update)
   .delete(isUser, controllers.api.v1.languages.delete)
 
-// router.route('/api/v1/languages/:slug/tutorials')
-//   .get(controllers.api.v1.languages.tutorials)
+router.route('/api/v1/languages/:slug/tutorials')
+  .get(controllers.api.v1.languages.tutorials)
 
 // router.route('/api/v1/languages/:slug/projects')
 //   .get(controllers.api.v1.languages.projects)

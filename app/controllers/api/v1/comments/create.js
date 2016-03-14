@@ -23,7 +23,7 @@ module.exports = {
   // Action logic middleware
   action: function * (req, res, next) {
     const { tutorialId, content } = req.body
-    const author = req.user
+    const author = _.pick(req.user, ['id', 'username', 'fullName'])
     const tutorial = yield Tutorial.get(tutorialId).run()
     const comment = new Comment({ tutorial, content, author })
     const data = yield comment.saveAll({author: true, tutorial: true}).catch((err) => {
