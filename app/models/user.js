@@ -26,6 +26,7 @@ var User = thinky.createModel('User', {
 
 User.ensureIndex('updatedAt')
 User.ensureIndex('email')
+User.ensureIndex('username')
 
 // User.pre('save', function (next) {
 //   User.filter({

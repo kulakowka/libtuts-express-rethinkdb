@@ -8,30 +8,42 @@ module.exports = {
   validations: function * (req, res, next) {
     req.checkBody('email', 'Email is invalid').notEmpty().isEmail()
     req.checkBody('password', 'Password is invalid').notEmpty()
-    req.checkBody('username', 'Invalid postparam').notEmpty()
+
     // if is owner
-    req.checkParams('id', 'Id is invalid').equals(req.user.id)
+    req.checkParams('username', 'Username is invalid').equals(req.user.username)
     next()
   },
 
   // Sanitization middleware
   sanitize: function * (req, res, next) {
-    req.sanitizeBody('email').normalizeEmail()
+    req.sanitizeBody('email').normalizeEmail().trim()
+    req.sanitizeBody('fullName').trim()
 
     next()
   },
 
   // Action logic middleware
   action: function * (req, res, next) {
-    
-    const { email, password } = req.body
+    const { email, password, fullName } = req.body
     const username = req.params.username
 
-    const user = yield User.getBy({ username })
+    const users = yield User.filter({ username })
+                            .pluck(
+                              'id',
+                              'username',
+                              'password',
+                              'fullName',
+                              'createdAt',
+                              'updatedAt',
+                              'role'
+                            ).run()
+    const user = users.pop()
 
     if (!user) return res.status(404).json({message: 'User not found'})
 
-    const data = yield user.merge({ email, password }).save()
+    const data = yield user.merge({ fullName, email, password }).save()
+
+    delete data.password
 
     res.json(data)
   }

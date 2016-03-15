@@ -43,6 +43,7 @@
     "passport-local": "^1.0.0",
     "passwordless": "^1.1.1",
     "passwordless-rethinkdbstore": "^1.0.2",
+    "pmx": "^0.6.1",
     "require-dir": "^0.3.0",
     "require-directory": "^2.1.1",
     "response-time": "^2.3.1",

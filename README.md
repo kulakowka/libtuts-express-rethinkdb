@@ -1,3 +1,10 @@
+http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api
+
+https://github.com/fortunejs/fortune
+https://github.com/holidayextras/jsonapi-server
+https://github.com/alex94puchades/jsonapify
+
+
 // READ
 
 GET users

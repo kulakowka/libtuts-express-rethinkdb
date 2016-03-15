@@ -14,7 +14,8 @@ module.exports = {
                               'username',
                               'fullName',
                               'createdAt',
-                              'updatedAt'
+                              'updatedAt',
+                              'role'
                             ).run()
     const user = users.pop()
 

@@ -86,13 +86,11 @@ router
 router.route('/api/v1/users/:username/tutorials')
   .get(controllers.api.v1.users.tutorials)
 
+router.route('/api/v1/users/:username/comments')
+  .get(controllers.api.v1.users.comments)
 
-// router.route('/api/v1/users/:id/comments')
-//   .get(controllers.api.v1.users.comments)
-
-
-// router.route('/api/v1/users/:id/projects')
-//   .get(controllers.api.v1.users.projects)
+router.route('/api/v1/users/:username/projects')
+  .get(controllers.api.v1.users.projects)
 
 router
   .route('/api/v1/tokens')
