@@ -23,11 +23,15 @@ module.exports = {
 
   // Action logic middleware
   action: function * (req, res, next) {
-    const id = req.params.id
-    const { email, password, username } = req.body
-    const user = yield User.getBy({id})
+    
+    const { email, password } = req.body
+    const username = req.params.username
+
+    const user = yield User.getBy({ username })
+
     if (!user) return res.status(404).json({message: 'User not found'})
-    const data = yield user.merge({email, password, username}).save()
+
+    const data = yield user.merge({ email, password }).save()
 
     res.json(data)
   }

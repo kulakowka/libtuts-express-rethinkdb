@@ -6,9 +6,20 @@ module.exports = {
 
   // Action logic middleware
   action: function * (req, res, next) {
-    const id = req.params.id
-    const user = yield User.getBy({id})
+    const username = req.params.username
+
+    const users = yield User.filter({ username })
+                            .pluck(
+                              'id',
+                              'username',
+                              'fullName',
+                              'createdAt',
+                              'updatedAt'
+                            ).run()
+    const user = users.pop()
+
     if (!user) return res.status(404).json({message: 'User not found'})
+
     res.json(user)
   }
 

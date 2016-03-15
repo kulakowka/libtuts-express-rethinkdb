@@ -16,8 +16,23 @@ module.exports = {
 
   // Action logic middleware
   action: function * (req, res, next) {
-    const limit = req.query.limit && req.query.limit < ITEMS_PER_PAGE ? req.query.limit : ITEMS_PER_PAGE
-    const data = yield User.without('password').orderBy(r.desc('createdAt')).limit(limit).execute()
+    let limit = req.query.limit || ITEMS_PER_PAGE
+    if (limit > ITEMS_PER_PAGE) limit = ITEMS_PER_PAGE
+
+    const data = yield User.pluck(
+                              'id',
+                              'username',
+                              'fullName',
+                              'createdAt',
+                              'updatedAt',
+                              'tutorialsCount',
+                              'commentsCount',
+                              'role'
+                            )
+                            .orderBy(r.desc('createdAt'))
+                            .limit(limit)
+                            .run()
+
     res.json(data)
   }
 

@@ -23,8 +23,10 @@ module.exports = {
   action: function * (req, res, next) {
     let { title, content, languages } = req.body
     const author = req.user
-    languages = typeof languages === 'string' ? [languages] : languages
-    languages = yield Language.getAll(...languages).run()
+    if (languages) {
+      languages = typeof languages === 'string' ? [languages] : languages
+      languages = yield Language.getAll(...languages).run()
+    }
     const tutorial = new Tutorial({ title, content, author, languages })
     const data = yield tutorial.saveAll({author: true, languages: true}).catch((err) => {
       res.status(400).json({message: err.message})

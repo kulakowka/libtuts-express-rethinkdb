@@ -13,14 +13,14 @@ passport.use(
   new LocalStrategy(
     {
       usernameField: 'email',
-      passwordField: 'password'
+      passwordField: 'password',
+      session: false
     },
     function (email, password, done) {
-      User.getBy({
-        email: email.trim().toLowerCase()
-      })
-      .then((user) => {
-        if (!user) return done(null, false, { message: 'Incorrect email.' })
+      email = email.trim().toLowerCase()
+      User.filter({ email }).run().then((users) => {
+        if (!users.length) return done(null, false, { message: 'Incorrect email.' })
+        let user = users.pop()
         user.checkPassword(password, (err, result) => {
           if (err || !result) return done(null, false, { message: 'Incorrect password.' })
           delete user.password
@@ -35,9 +35,9 @@ passport.use(
 passport.use(new JwtBearerStrategy(
   TOKEN_SECRET,
   function (token, done) {
-    User.getBy({id: token.id}).then((user) => {
-      // console.log('token', token, user)
-      if (!user) return done(null, false)
+    User.filter({ id: token.id }).without('password').run().then((users) => {
+      if (!users.length) return done(null, false, { message: 'Incorrect token.' })
+      let user = users.pop()
       return done(null, user, token)
     }).catch(done)
   }

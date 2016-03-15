@@ -2,12 +2,12 @@
 
 // Settings
 
-const TIMES = 10   // создать N раз
-const COUNT = 100   // N аккаунтов
+const TIMES = 1   // создать N раз
+const COUNT = 5   // N аккаунтов
 
 // Run
 
-var Account = require('models/account')
+var User = require('models/user')
 var faker = require('faker')
 var _ = require('lodash')
 var debug = require('debug')
@@ -41,43 +41,47 @@ let total = 0
 let startTime = new Date()
 
 thinky.r
-.tableDrop('Account')
+.tableDrop('User')
 .run((result) => {
-  log('Account table dropped')
+  log('User table dropped')
 
-  createFakeAccounts(TIMES, COUNT)
+  createFakeUsers(TIMES, COUNT)
   .then(() => {
     let resultTime = humanizeDuration(new Date() - startTime)
     let resultCount = numeral(total).format('0,0')
 
-    log('%s accounts created: %s', resultCount, resultTime)
+    log('%s Users created: %s', resultCount, resultTime)
     process.exit()
   })
   .catch(console.log)
 })
 
-function createFakeAccounts (times, count) {
-  let accounts = _.times(count, createFakeAccount)
+function createFakeUsers (times, count) {
+  let users = _.times(count, createFakeUser)
 
-  return Account
-  .insert(accounts)
+  return User
+  .insert(users)
   .execute()
   .then((result) => {
     times--
     total = total + count
     log('times: %d count: %d total: %d', times, count, total)
-    if (times) return createFakeAccounts(times, count)
+    if (times) return createFakeUsers(times, count)
     return result
   })
 }
 
-function createFakeAccount () {
+function createFakeUser () {
   let createdAt = faker.date.past()
   let updatedAt = faker.date.past()
   let email = faker.internet.email().toLowerCase()
   let password = faker.internet.password()
+  let fullName = faker.name.firstName() + ' ' + faker.name.lastName()
+  let username = fullName.replace(/\W/, '-').toLowerCase()
 
   return {
+    fullName,
+    username,
     email,
     password,
     createdAt,

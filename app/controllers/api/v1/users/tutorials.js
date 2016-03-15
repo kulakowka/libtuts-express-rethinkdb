@@ -1,5 +1,6 @@
 'use strict'
 
+const User = require('models/user')
 const Tutorial = require('models/tutorial')
 const r = require('utils/thinky').r
 
@@ -16,19 +17,27 @@ module.exports = {
 
   // Action logic middleware
   action: function * (req, res, next) {
-    const limit = req.query.limit || ITEMS_PER_PAGE
+    let limit = req.query.limit || ITEMS_PER_PAGE
     if (limit > ITEMS_PER_PAGE) limit = ITEMS_PER_PAGE
 
+    const username = req.params.username
+
+    const users = yield User.filter({ username }).run()
+    const user = users.pop()
+
+    if (!user) return res.status(404).json({message: 'User not found'})
+
     const data = yield Tutorial.getJoin({ author: true, languages: true })
+                               .filter({ authorId: user.id })
                                .pluck(
-                                  'id', 
+                                  'id',
                                   'title',
                                   'contentHtml',
                                   'commentsCount',
                                   'createdAt',
                                   'updatedAt',
-                                  {author : ['id', 'username', 'fullName']},
-                                  {languages : ['id', 'name', 'slug']}
+                                  { author: ['id', 'username', 'fullName'] },
+                                  { languages: ['id', 'name', 'slug'] }
                                 )
                                .orderBy(r.desc('createdAt'))
                                .limit(limit)

@@ -1,3 +1,33 @@
+// READ
+
+GET users
+GET users/:id
+GET users/:id/comments
+GET users/:id/projects
+GET users/:id/languages
+GET users/:id/tutorials
+
+GET tutorials
+GET tutorials/:id
+GET tutorials/:id/comments
+GET tutorials/:id/projects
+GET tutorials/:id/languages
+
+GET projects
+GET projects/:id
+GET projects/:id/tutorials
+GET projects/:id/languages
+
+GET languages
+GET languages/:id
+GET languages/:id/tutorials
+GET languages/:id/projects
+
+GET comments
+GET comments/:id
+
+
+
 https://github.com/rethinkdb/rethinkdb-example-nodejs-chat/blob/master/app.js
 
 https://www.rethinkdb.com/docs/cookbook/javascript/

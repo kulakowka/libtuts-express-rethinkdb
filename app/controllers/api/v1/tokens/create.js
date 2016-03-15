@@ -35,8 +35,6 @@ module.exports = {
         createdAt: new Date()
       }, TOKEN_SECRET)
 
-      console.log(user, token)
-
       res.json({ token })
     })(req, res, next)
   }

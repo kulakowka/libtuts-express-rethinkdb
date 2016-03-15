@@ -9,9 +9,7 @@ var bcrypt = require('bcrypt')
 var User = thinky.createModel('User', {
   id: type.string(),
   username: type.string(),
-  fullName: type.string().default(function () {
-    return this.username
-  }),
+  fullName: type.string().default(() => this.username),
   email: type.string(),
   password: type.string(),
   createdAt: type.date().default(r.now()),
@@ -48,10 +46,6 @@ User.ensureIndex('email')
  */
 User.define('checkPassword', function (password, callback) {
   bcrypt.compare(password, this.password, callback)
-})
-
-User.defineStatic('getBy', function (filter) {
-  return User.filter(filter).run().then((items) => (items.length && items.pop()))
 })
 
 // Add newbie role
