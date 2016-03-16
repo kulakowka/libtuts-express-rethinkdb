@@ -5,16 +5,14 @@ var slug = require('slug')
 var thinky = require('utils/thinky')
 var type = thinky.type
 var r = thinky.r
-var Tutorial = require('models/tutorial')
-var Language = require('models/language')
-var User = require('models/user')
 
 var Project = thinky.createModel('Project', {
   id: type.string(),
   name: type.string(),
   slug: type.string(),
   createdAt: type.date().default(r.now()),
-  updatedAt: type.date().default(r.now())
+  updatedAt: type.date().default(r.now()),
+  tutorialsCount: type.number().default(0)
 })
 
 Project.ensureIndex('slug')

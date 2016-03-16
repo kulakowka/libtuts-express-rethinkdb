@@ -5,16 +5,15 @@ var slug = require('slug')
 var thinky = require('utils/thinky')
 var type = thinky.type
 var r = thinky.r
-// var Tutorial = require('models/tutorial')
-// var Project = require('models/project')
-// var User = require('models/user')
 
 var Language = thinky.createModel('Language', {
   id: type.string(),
   name: type.string(),
   slug: type.string(),
   createdAt: type.date().default(r.now()),
-  updatedAt: type.date().default(r.now())
+  updatedAt: type.date().default(r.now()),
+  projectsCount: type.number().default(0),
+  tutorialsCount: type.number().default(0)
   // authorId => User
   // tutorials => [Tutorial, Tutorial]
 })

@@ -31,7 +31,7 @@ module.exports = {
                             )
                             .orderBy(r.desc('createdAt'))
                             .limit(limit)
-                            .run()
+                            .execute()
 
     res.json(data)
   }

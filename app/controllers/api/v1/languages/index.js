@@ -21,7 +21,7 @@ module.exports = {
     let limit = req.query.limit || ITEMS_PER_PAGE
     if (limit > ITEMS_PER_PAGE) limit = ITEMS_PER_PAGE
 
-    const data = yield Language //.getJoin({ author: true })
+    const data = yield Language.getJoin({ author: true })
                               .pluck(
                                 'id',
                                 'name',
@@ -32,7 +32,7 @@ module.exports = {
                               )
                               .orderBy(r.desc('createdAt'))
                               .limit(limit)
-                              .run()
+                              .execute()
     res.json(data)
   }
 

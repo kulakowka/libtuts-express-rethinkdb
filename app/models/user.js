@@ -14,6 +14,8 @@ var User = thinky.createModel('User', {
   password: type.string(),
   createdAt: type.date().default(r.now()),
   updatedAt: type.date().default(r.now()),
+  projectsCount: type.number().default(0),
+  languagesCount: type.number().default(0),
   tutorialsCount: type.number().default(0),
   commentsCount: type.number().default(0),
   role: {
