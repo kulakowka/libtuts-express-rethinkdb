@@ -14,6 +14,7 @@ Language.hasAndBelongsToMany(Tutorial, 'tutorials', 'id', 'id')
 
 Project.belongsTo(User, 'author', 'authorId', 'id')
 Project.hasAndBelongsToMany(Tutorial, 'tutorials', 'id', 'id')
+Project.hasAndBelongsToMany(Language, 'languages', 'id', 'id')
 
 Tutorial.belongsTo(User, 'author', 'authorId', 'id')
 Tutorial.hasAndBelongsToMany(Language, 'languages', 'id', 'id')
