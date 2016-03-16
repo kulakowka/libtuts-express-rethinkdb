@@ -16,16 +16,16 @@ module.exports = {
 
   // Action logic middleware
   action: function * (req, res, next) {
-    const limit = req.query.limit || ITEMS_PER_PAGE
+    let limit = req.query.limit || ITEMS_PER_PAGE
     if (limit > ITEMS_PER_PAGE) limit = ITEMS_PER_PAGE
 
     const data = yield Comment.getJoin({ author: true, tutorial: true })
                               .pluck(
-                                'id', 
+                                'id',
                                 'contentHtml',
                                 'createdAt',
-                                {author : ['id', 'username', 'fullName']},
-                                {tutorial : ['id', 'title']}
+                                { author: ['id', 'username', 'fullName'] },
+                                { tutorial: ['id', 'title'] }
                               )
                               .orderBy(r.desc('createdAt'))
                               .limit(limit)

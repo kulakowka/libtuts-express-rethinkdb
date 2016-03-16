@@ -19,3 +19,10 @@ Tutorial.belongsTo(User, 'author', 'authorId', 'id')
 Tutorial.hasAndBelongsToMany(Language, 'languages', 'id', 'id')
 Tutorial.hasAndBelongsToMany(Project, 'projects', 'id', 'id')
 
+module.exports = {
+  Comment,
+  Language,
+  Project,
+  Tutorial,
+  User
+}

@@ -31,7 +31,7 @@ module.exports = {
                                .pluck(
                                   'id',
                                   'title',
-                                  'contentHtml',
+                                  // 'contentHtml',
                                   'commentsCount',
                                   'createdAt',
                                   'updatedAt',

@@ -16,8 +16,23 @@ module.exports = {
 
   // Action logic middleware
   action: function * (req, res, next) {
-    const limit = req.query.limit && req.query.limit < ITEMS_PER_PAGE ? req.query.limit : ITEMS_PER_PAGE
-    const data = yield Language.getJoin({ author: true }).orderBy(r.desc('createdAt')).limit(limit).run()
+    // const limit = req.query.limit && req.query.limit < ITEMS_PER_PAGE ? req.query.limit : ITEMS_PER_PAGE
+    // const data = yield Language.getJoin({ author: true }).orderBy(r.desc('createdAt')).limit(limit).run()
+    let limit = req.query.limit || ITEMS_PER_PAGE
+    if (limit > ITEMS_PER_PAGE) limit = ITEMS_PER_PAGE
+
+    const data = yield Language //.getJoin({ author: true })
+                              .pluck(
+                                'id',
+                                'name',
+                                'slug',
+                                'createdAt',
+                                'updatedAt',
+                                { author: ['id', 'username', 'fullName'] }
+                              )
+                              .orderBy(r.desc('createdAt'))
+                              .limit(limit)
+                              .run()
     res.json(data)
   }
 

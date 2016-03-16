@@ -7,7 +7,7 @@ var type = thinky.type
 var r = thinky.r
 // var Tutorial = require('models/tutorial')
 // var Project = require('models/project')
-var User = require('models/user')
+// var User = require('models/user')
 
 var Language = thinky.createModel('Language', {
   id: type.string(),
