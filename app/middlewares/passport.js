@@ -35,11 +35,7 @@ passport.use(
 passport.use(new JwtBearerStrategy(
   TOKEN_SECRET,
   function (token, done) {
-    User.filter({ id: token.id }).without('password').run().then((users) => {
-      if (!users.length) return done(null, false, { message: 'Incorrect token.' })
-      let user = users.pop()
-      return done(null, user, token)
-    }).catch(done)
+    return done(null, token, token)
   }
 ))
 

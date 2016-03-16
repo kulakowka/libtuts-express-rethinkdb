@@ -1,6 +1,6 @@
 'use strict'
 
-const { Comment, Tutorial } = require('models')
+const { Comment, Tutorial, User } = require('models')
 
 module.exports = {
 
@@ -22,7 +22,8 @@ module.exports = {
   // Action logic middleware
   action: function * (req, res, next) {
     const { tutorialId, content } = req.body
-    const author = req.user
+    const author = yield User.get(req.user.id).run()
+    if (!author) return res.status(404).json({message: 'User not found'})
     const tutorial = yield Tutorial.get(tutorialId).run()
     const comment = new Comment({ tutorial, content, author })
     const data = yield comment.saveAll({author: true, tutorial: true}).catch((err) => {
