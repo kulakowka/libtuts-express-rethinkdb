@@ -1,6 +1,6 @@
 'use strict'
 
-const Language = require('models/language')
+const { Language } = require('models')
 const r = require('utils/thinky').r
 
 const ITEMS_PER_PAGE = 30

@@ -1,6 +1,6 @@
 'use strict'
 
-const Language = require('models/language')
+const { Language } = require('models')
 
 module.exports = {
 

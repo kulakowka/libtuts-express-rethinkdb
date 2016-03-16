@@ -1,6 +1,6 @@
 'use strict'
 
-const User = require('models/user')
+const { User } = require('models')
 const r = require('utils/thinky').r
 
 const ITEMS_PER_PAGE = 30

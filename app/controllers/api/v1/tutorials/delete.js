@@ -1,6 +1,6 @@
 'use strict'
 
-const Tutorial = require('models/tutorial')
+const { Tutorial } = require('models')
 
 module.exports = {
 

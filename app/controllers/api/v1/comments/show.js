@@ -1,6 +1,6 @@
 'use strict'
 
-const Comment = require('models/comment')
+const { Comment } = require('models')
 
 module.exports = {
 

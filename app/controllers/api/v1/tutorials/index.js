@@ -1,6 +1,6 @@
 'use strict'
 
-const Tutorial = require('models/tutorial')
+const { Tutorial } = require('models')
 const r = require('utils/thinky').r
 
 const ITEMS_PER_PAGE = 30
@@ -16,19 +16,19 @@ module.exports = {
 
   // Action logic middleware
   action: function * (req, res, next) {
-    const limit = req.query.limit || ITEMS_PER_PAGE
+    let limit = req.query.limit || ITEMS_PER_PAGE
     if (limit > ITEMS_PER_PAGE) limit = ITEMS_PER_PAGE
 
     const data = yield Tutorial.getJoin({ author: true, languages: true })
                                .pluck(
-                                  'id', 
+                                  'id',
                                   'title',
                                   'contentHtml',
                                   'commentsCount',
                                   'createdAt',
                                   'updatedAt',
-                                  {author : ['id', 'username', 'fullName']},
-                                  {languages : ['id', 'name', 'slug']}
+                                  { author: ['id', 'username', 'fullName'] },
+                                  { languages: ['id', 'name', 'slug'] }
                                 )
                                .orderBy(r.desc('createdAt'))
                                .limit(limit)
