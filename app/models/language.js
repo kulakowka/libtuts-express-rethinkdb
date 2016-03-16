@@ -5,9 +5,9 @@ var slug = require('slug')
 var thinky = require('utils/thinky')
 var type = thinky.type
 var r = thinky.r
-var Tutorial = require('./tutorial')
-var Project = require('./project')
-var User = require('./user')
+// var Tutorial = require('models/tutorial')
+// var Project = require('models/project')
+var User = require('models/user')
 
 var Language = thinky.createModel('Language', {
   id: type.string(),
@@ -15,13 +15,11 @@ var Language = thinky.createModel('Language', {
   slug: type.string(),
   createdAt: type.date().default(r.now()),
   updatedAt: type.date().default(r.now())
+  // authorId => User
+  // tutorials => [Tutorial, Tutorial]
 })
 
 Language.ensureIndex('slug')
-// Language.hasAndBelongsToMany(Tutorial, 'tutorials', 'id', 'id')
-// Tutorial.hasAndBelongsToMany(Language, 'languages', 'id', 'id')
-// Language.hasAndBelongsToMany(Project, 'projects', 'id', 'id')
-Language.belongsTo(User, 'author', 'authorId', 'id')
 
 // marked content
 Language.pre('save', function (next) {

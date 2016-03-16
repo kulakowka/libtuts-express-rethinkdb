@@ -14,10 +14,9 @@ var Comment = thinky.createModel('Comment', {
   contentHtml: type.string(),
   createdAt: type.date().default(r.now()),
   updatedAt: type.date().default(r.now())
+  // authorId => User
+  // tutorialId => Tutorial
 })
-
-Comment.belongsTo(User, 'author', 'authorId', 'id')
-Comment.belongsTo(Tutorial, 'tutorial', 'tutorialId', 'id')
 
 // marked content
 Comment.pre('save', function (next) {

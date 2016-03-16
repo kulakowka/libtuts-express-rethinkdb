@@ -6,10 +6,7 @@ var marked = require('marked')
 var thinky = require('utils/thinky')
 var type = thinky.type
 var r = thinky.r
-var Comment = require('./comment')
-var User = require('./user')
-var Project = require('./project')
-var Language = require('./language')
+var User = require('models/user')
 
 var Tutorial = thinky.createModel('Tutorial', {
   id: type.string(),
@@ -19,12 +16,10 @@ var Tutorial = thinky.createModel('Tutorial', {
   commentsCount: type.number().default(0),
   createdAt: type.date().default(r.now()),
   updatedAt: type.date().default(r.now())
+  // authorId => User
+  // languages => [Language, Language]
+  // projects => [Project, Project]
 })
-
-// Tutorial.hasAndBelongsToMany(Project, 'projects', 'id', 'id')
-// Tutorial.hasAndBelongsToMany(Language, 'languages', 'id', 'id')
-Tutorial.hasAndBelongsToMany(Language, 'languages', 'id', 'id')
-Tutorial.belongsTo(User, 'author', 'authorId', 'id')
 
 // marked content
 Tutorial.pre('save', function (next) {
@@ -34,8 +29,8 @@ Tutorial.pre('save', function (next) {
 
 Tutorial.post('save', function (next) {
   const authorId = this.authorId
-  co(function* () {
-    // increment comments count
+  co(function * () {
+    // increment tutorials count
     yield User.get(authorId).update({tutorialsCount: r.row('tutorialsCount').add(1)}).run()
   })
   .then((value) => next())
@@ -43,10 +38,9 @@ Tutorial.post('save', function (next) {
 })
 
 Tutorial.post('delete', function (next) {
-  const tutorialId = this.tutorialId
   const authorId = this.authorId
-  co(function* () {
-    // decrement comments count
+  co(function * () {
+    // decrement tutorials count
     yield User.get(authorId).update({tutorialsCount: r.row('tutorialsCount').add(-1)}).run()
   })
   .then((value) => next())

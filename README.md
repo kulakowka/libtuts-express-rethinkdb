@@ -1,3 +1,28 @@
+User.get("0e4a6f6f-cc0c-4aa5-951a-fcfc480dd05a").getJoin({
+    accounts: {
+        _apply: function(sequence) {
+            return sequence.orderBy('sold').limit(2)
+        }
+    }
+}).run().then(function(user) {
+    /*
+     * user = {
+     *     id: "0e4a6f6f-cc0c-4aa5-951a-fcfc480dd05a",
+     *     name: "Michel",
+     *     accounts: [{
+     *         id: "3851d8b4-5358-43f2-ba23-f4d481358901",
+     *         userId: "0e4a6f6f-cc0c-4aa5-951a-fcfc480dd05a",
+     *         sold: 2420
+     *     }, {
+     *         id: "db7ac1e8-0160-4e57-bf98-144ad5f93feb",
+     *         userId: "0e4a6f6f-cc0c-4aa5-951a-fcfc480dd05a",
+     *         sold: 5832
+     *     }]
+     * }
+     */
+});
+
+
 http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api
 
 https://github.com/fortunejs/fortune
