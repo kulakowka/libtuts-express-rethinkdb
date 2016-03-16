@@ -9,12 +9,8 @@ module.exports = {
     let username = req.user.username
 
     const users = yield User.filter({ username })
-                            .pluck(
-                              'id',
-                              'username',
-                              'fullName',
-                              'role'
-                            ).execute()
+                            .without('password')
+                            .execute()
     const user = users.pop()
 
     if (!user) return res.status(404).json({message: 'User not found'})

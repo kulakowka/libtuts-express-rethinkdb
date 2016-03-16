@@ -1,6 +1,9 @@
 1.4 Generate JWT Token: Re-Authenticate Route
 https://medium.com/@rajaraodv/securing-react-redux-apps-with-jwt-tokens-fcfe81356ea0#.te1moqz97
 
+https://github.com/jfromaniello/passport.socketio
+https://auth0.com/blog/2014/01/15/auth-with-socket-io/
+https://gist.github.com/jfromaniello/8418116
 
 
 app.post('/refresh_token', function (req, res) {
