@@ -1,3 +1,27 @@
+1.4 Generate JWT Token: Re-Authenticate Route
+https://medium.com/@rajaraodv/securing-react-redux-apps-with-jwt-tokens-fcfe81356ea0#.te1moqz97
+
+
+
+app.post('/refresh_token', function (req, res) {
+  // verify the existing token
+  var profile = jwt.verify(req.body.token, secret);
+
+  // if more than 14 days old, force login
+  if (profile.original_iat - new Date() > 14) { // iat == issued at
+    return res.send(401); // re-logging
+  }
+
+  // check if the user still exists or if authorization hasn't been revoked
+  if (!valid) return res.send(401); // re-logging
+
+  // issue a new token
+  var refreshed_token = jwt.sign(profile, secret, { expiresInMinutes: 60*5 });
+  res.json({ token: refreshed_token });
+});
+
+
+
 User.get("0e4a6f6f-cc0c-4aa5-951a-fcfc480dd05a").getJoin({
     accounts: {
         _apply: function(sequence) {

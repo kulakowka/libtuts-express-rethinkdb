@@ -30,7 +30,9 @@ module.exports = {
       if (err) return next(err)
       if (!user) return res.status(400).json({ message: 'Incorrect username or password' })
 
-      var token = jwt.sign(user, TOKEN_SECRET)
+      var token = jwt.sign(user, TOKEN_SECRET, {
+        expiresIn: '24h'
+      })
 
       res.json({ token })
     })(req, res, next)
